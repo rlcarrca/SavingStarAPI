@@ -92,7 +92,10 @@ class SavingStarAPI(object):
             try:
                 return resp.json()
             except ValueError:
-                return {'error': {'code': resp.status_code, 'message': resp.text}}
+                return {'error': {'code': resp.status_code,
+                                  'message': resp.text
+                                  }
+                                  }
 
     def _doPost(self, url, payload):
         if self.access_token is not None:
@@ -109,7 +112,10 @@ class SavingStarAPI(object):
             try:
                 return resp.json()
             except ValueError:
-                return {'error': {'code': resp.status_code, 'message': resp.text}}
+                return {'error': {'code': resp.status_code,
+                                  'message': resp.text
+                                  }
+                                  }
 
     def _doDelete(self, url, payload):
         if self.access_token is not None:
@@ -126,7 +132,10 @@ class SavingStarAPI(object):
             try:
                 return resp.json()
             except ValueError:
-                return {'error': {'code': resp.status_code, 'message': resp.text}}
+                return {'error': {'code': resp.status_code,
+                                  'message': resp.text
+                                  }
+                                  }
 
     # Coupon-related
     #
@@ -134,7 +143,11 @@ class SavingStarAPI(object):
         url = "https://api.savingstar.com/coupons.json"
         return self._doGet(url)
 
-    def activateCoupon(self, coupon_id, user_id=None, user_id_proxy=None, channel=1):
+    def activateCoupon(self,
+                       coupon_id,
+                       user_id=None,
+                       user_id_proxy=None,
+                       channel=1):
         '''Note:
                 for channel:
                     1 - web
@@ -148,7 +161,10 @@ class SavingStarAPI(object):
                    }
         return self._doPost(url, payload)
 
-    def externalCouponActivate(self, external_coupon_id, tracking_id_value, retailer_id):
+    def externalCouponActivate(self,
+                               external_coupon_id,
+                               tracking_id_value,
+                               retailer_id):
         url = "https://api.savingstar.com/coupons/external_activation.json"
         payload = {'external_coupon_id': external_coupon_id,
                    'tracking_id_value': tracking_id_value,
@@ -188,14 +204,23 @@ class SavingStarAPI(object):
         url = "https://api.savingstar.com/{0}.json".format(retailer_id)
         return self._doGet(url)
 
-    def retailerGeographicalSearch(self, lat=None, lng=None, zipcode=None, radius=10):
+    def retailerGeographicalSearch(self,
+                                   lat=None,
+                                   lng=None,
+                                   zipcode=None,
+                                   radius=10):
         if zipcode is None:
             url = "https://api.savingstar.com/retailers.json?lat={0}&lon={1}&radius={2}".format(lat, lng, radius)
         else:
             url = "https://api.savingstar.com/retailers.json?zipcode={0}&radius={1}".format(zipcode, radius)
         return self._doGet(url)
 
-    def retailerSpecificLocationGeographicalSearch(self, retailer_id, lat=None, lng=None, zipcode=None, radius=10):
+    def retailerSpecificLocationGeographicalSearch(self,
+                                                   retailer_id,
+                                                   lat=None,
+                                                   lng=None,
+                                                   zipcode=None,
+                                                   radius=10):
         if zipcode is None:
             url = "https://api.savingstar.com/retailers/{0}/retailer_locations.json?lat={1}&lon={2}&radius={3}".format(retailer_id, lat, lng, radius)
         else:
@@ -205,25 +230,33 @@ class SavingStarAPI(object):
     # Tracking_id-related
     #
     def getRegisteredTrackingIds(self, user_id=None, user_id_proxy=None):
-        if user_id_proxy == None:
+        if user_id_proxy is None:
             url = "https://api.savingstar.com/tracking_ids.json?user_id={0}".format(user_id)
         else:
             url = "https://api.savingstar.com/tracking_ids.json?user_id_proxy={0}".format(user_id_proxy)
         return self._doGet(url)
 
-    def getRegisteredTrackingId(self, tracking_id, user_id=None, user_id_proxy=None):
-        if user_id_proxy == None:
+    def getRegisteredTrackingId(self,
+                                tracking_id,
+                                user_id=None,
+                                user_id_proxy=None):
+        if user_id_proxy is None:
             url = "https://api.savingstar.com/{0}.json?user_id={1}".format(tracking_id, user_id)
         else:
             url = "https://api.savingstar.com/{0}.json?user_id_proxy={1}".format(tracking_id, user_id_proxy)
         return self._doGet(url)
 
-    def registerTrackingId(self, namespace, retailer_id, value, user_id=None, user_id_proxy=None):
+    def registerTrackingId(self,
+                           namespace,
+                           retailer_id,
+                           value,
+                           user_id=None,
+                           user_id_proxy=None):
         url = "https://api.savingstar.com/tracking_ids.json"
-        if user_id_proxy == None:
-            payload = {'user_id': user_id }
+        if user_id_proxy is None:
+            payload = {'user_id': user_id}
         else:
-            payload = {'user_id_proxy': user_id_proxy }
+            payload = {'user_id_proxy': user_id_proxy}
         payload['namespace'] = namespace
         payload['retailer_id'] = retailer_id
         payload['value'] = value
@@ -232,10 +265,10 @@ class SavingStarAPI(object):
 
     def removeTrackingId(self, id, user_id=None, user_id_proxy=None):
         url = "https://api.savingstar.com/tracking_ids.json"
-        if user_id_proxy == None:
-            payload = {'user_id': user_id }
+        if user_id_proxy is None:
+            payload = {'user_id': user_id}
         else:
-            payload = {'user_id_proxy': user_id_proxy }
+            payload = {'user_id_proxy': user_id_proxy}
         payload['id'] = id
 
         return self._doDelete(url, payload)
@@ -258,38 +291,42 @@ class SavingStarAPI(object):
 
     def resetPassword(self, user_id):
         url = "https://api.savingstar.com/reset_password.json"
-        payload = {'user_id': user_id
-                   }
+        payload = {'user_id': user_id}
         return self._doPost(url, payload)
 
     def createProxyUser(self, user_id_proxy):
         url = "https://api.savingstar.com/proxy.json"
-        payload = {'user_id_proxy': user_id_proxy
-                   }
+        payload = {'user_id_proxy': user_id_proxy}
         return self._doPost(url, payload)
 
     def getAccountDetails(self, user_id=None, user_id_proxy=None):
-        if user_id_proxy == None:
+        if user_id_proxy is None:
             url = "https://api.savingstar.com/account.json?user_id={0}".format(user_id)
         else:
             url = "https://api.savingstar.com/account.json?user_id_proxy={0}".format(user_id_proxy)
         return self._doGet(url)
 
     def getAccountHistory(self, user_id=None, user_id_proxy=None, lookback=90):
-        if user_id_proxy == None:
+        if user_id_proxy is None:
             url = "https://api.savingstar.com/history.json?user_id={0}&lookback={1}".format(user_id, lookback)
         else:
             url = "https://api.savingstar.com/history.json?user_id_proxy={0}&lookback={1}".format(user_id_proxy, lookback)
         return self._doGet(url)
 
-    def requestPayout(self, payout_type, amount, user_id=None,
-                      user_id_proxy=None, paypal_email_address=None, bank_account_type=None,
-                      bank_account_number=None, bank_routing_number=None):
+    def requestPayout(self,
+                      payout_type,
+                      amount,
+                      user_id=None,
+                      user_id_proxy=None,
+                      paypal_email_address=None,
+                      bank_account_type=None,
+                      bank_account_number=None,
+                      bank_routing_number=None):
         url = "https://api.savingstar.com/payout_request.json"
-        if user_id_proxy == None:
-            payload = {'user_id': user_id }
+        if user_id_proxy is None:
+            payload = {'user_id': user_id}
         else:
-            payload = {'user_id_proxy': user_id_proxy }
+            payload = {'user_id_proxy': user_id_proxy}
         payload['payout_type'] = payout_type
         payload['amount'] = amount
         if payout_type == 'paypal':
