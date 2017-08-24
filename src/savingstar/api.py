@@ -73,6 +73,9 @@ class SavingStarAPI(object):
             if 'access_token' in x.keys():
                 self.access_token = x['access_token']
 
+    def getAccessToken(self):
+        return self.access_token
+        
     def _getOAuthToken(self):
         url = "https://api.savingstar.com/oauth/access_token"
         payload = {'client_id': self.client_id,
